@@ -7,56 +7,94 @@
 
 import Foundation
 
+protocol AuthViewModelDelegate: AnyObject {
+    func errorOccured(message: String)
+    func loginSuccessfull()
+    func signUpSuccessfull()
+}
 
 class AuthViewModel {
     private let authService = AuthService()
     var isAuthenticated = false
+    weak var delegate: AuthViewModelDelegate?
     
     var isUserPrevioslySigned: Bool {
         return authService.hasSavedCredentials()
     }
     
-    func login(username: String, password: String, completion: @escaping (Bool) -> Void) {
-        if authService.validateCredentials(username: username, password: password) {
-            isAuthenticated = true
-            completion(true)
-        } else {
-            completion(false)
-        }
-    }
-    
-    func signUp(username: String, password: String, completion: @escaping (Bool, String?) -> Void) {
-        guard validateUsername(username) else {
-            completion(false, "Invalid username. It must be at least 3 characters long.")
-            return
-        }
-        guard validatePassword(password) else {
-            completion(false, "Invalid password. It must be at least 6 characters long.")
-            return
-        }
-        authService.saveCredentials(username: username, password: password)
-        completion(true, nil)
-    }
-    
-    
     func logout() {
         isAuthenticated = false
+        authService.deleteCredentials()
     }
     
-    func loginWithBiometrics(completion: @escaping (Bool) -> Void) {
-        authService.authenticateWithBiometrics { success in
-            if success {
-                self.isAuthenticated = true
+    //MARK: - Username and Password
+    func login(username: String?, password: String?) {
+        if let user = validateInputs(username: username, password: password) {
+            if authService.validateCredentials(username: user.username, password: user.password) {
+                isAuthenticated = true
+                delegate?.loginSuccessfull()
+            } else {
+                delegate?.errorOccured(message: "Invalid username or password")
             }
-            completion(success)
         }
     }
     
-    private func validateUsername(_ username: String) -> Bool {
-        return username.count >= 3
+    func signUp(username: String?, password: String?) {
+        if let user = validateInputs(username: username, password: password) {
+            authService.saveCredentials(username: user.username, password: user.password)
+            delegate?.signUpSuccessfull()
+        }
     }
     
-    private func validatePassword(_ password: String) -> Bool {
-        return password.count >= 6
+    //MARK: - Biometric
+    func loginWithBiometrics() {
+        authService.authenticateWithBiometrics { [weak self] success in
+            if success, let credentials = self?.authService.getSavedCredentials() {
+                let components = credentials.split(separator: ":")
+                if components.count == 2 {
+                    self?.delegate?.loginSuccessfull()
+                } else {
+                    self?.delegate?.errorOccured(message: "Invalid credentials")
+                }
+            } else {
+                self?.delegate?.errorOccured(message: "Failed to authenticate with biometrics")
+            }
+        }
+    }
+    
+    func signUpWithBiometrics(username: String?, password: String?) {
+        if let user = validateInputs(username: username, password: password) {
+            authService.saveCredentials(username: user.username, password: user.password)
+            
+            authService.authenticateWithBiometrics { [weak self] success in
+                if success {
+                    self?.delegate?.signUpSuccessfull()
+                } else {
+                    self?.delegate?.errorOccured(message: "Failed to authenticate with biometrics")
+                }
+            }
+        }
+    }
+    
+    
+    private func validateInputs(username: String?, password: String?) ->  User? {
+        
+        guard let username = username, let password = password else {
+            delegate?.errorOccured(message: "All fields are required.")
+            return nil
+        }
+        
+        if username.count < 3 {
+            delegate?.errorOccured(message: "Invalid username. It must be at least 3 characters long.")
+            return nil
+        }
+        
+        if password.count < 6 {
+            delegate?.errorOccured(message: "Invalid password. It must be at least 6 characters long.")
+            return nil
+        }
+        
+        return User(username: username, password: password)
     }
 }
+

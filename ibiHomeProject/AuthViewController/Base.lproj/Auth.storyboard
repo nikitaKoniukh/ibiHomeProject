@@ -26,7 +26,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="3TB-2O-oyo">
-                                <rect key="frame" x="16" y="333.66666666666669" width="361" height="184.66666666666669"/>
+                                <rect key="frame" x="16" y="275.66666666666663" width="361" height="300.66666666666663"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fFg-Cd-fO7">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="34"/>
@@ -40,8 +40,9 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="idb-0d-oZ2">
                                         <rect key="frame" x="0.0" y="100" width="361" height="34.333333333333343"/>
+                                        <color key="tintColor" systemColor="systemPurpleColor"/>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="tinted" title="Sign In"/>
+                                        <buttonConfiguration key="configuration" style="tinted" title="Login"/>
                                         <connections>
                                             <action selector="loginButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="myW-tp-TIP"/>
                                         </connections>
@@ -54,6 +55,35 @@
                                             <action selector="createNewUserButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ejr-sF-00w"/>
                                         </connections>
                                     </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="JKE-uc-SZY">
+                                        <rect key="frame" x="0.0" y="200.66666666666663" width="361" height="100"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7CX-Ca-LRl">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDr-cY-1g4">
+                                                <rect key="frame" x="130.66666666666666" y="0.0" width="100" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="9zR-7M-ZSy"/>
+                                                    <constraint firstAttribute="height" constant="100" id="Wa5-4e-YQE"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" image="faceid" catalog="system"/>
+                                                <connections>
+                                                    <action selector="biometricButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LB2-zO-mJz"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kFk-X8-Fpm">
+                                                <rect key="frame" x="261.33333333333331" y="0.0" width="99.666666666666686" height="100"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            </view>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="TDr-cY-1g4" firstAttribute="centerX" secondItem="JKE-uc-SZY" secondAttribute="centerX" id="ZkA-Mp-tis"/>
+                                            <constraint firstItem="TDr-cY-1g4" firstAttribute="leading" secondItem="7CX-Ca-LRl" secondAttribute="trailing" constant="30.666666666666657" id="clN-rQ-buz"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -71,6 +101,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="a8A-f1-1Qf"/>
                     <connections>
+                        <outlet property="biometricButton" destination="TDr-cY-1g4" id="bDU-f3-PtX"/>
                         <outlet property="createNewUserButton" destination="pCo-sv-2WR" id="8P8-AD-ckV"/>
                         <outlet property="loginButton" destination="idb-0d-oZ2" id="eI9-t8-ft8"/>
                         <outlet property="lottieAnimationView" destination="DRJ-Cd-uJL" id="NGT-HZ-Kwh"/>
@@ -96,7 +127,6 @@
         <!--Navigation Controller-->
         <scene sceneID="BBY-SU-8ga">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ayI-Qh-84s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Mhs-b1-r30" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mSP-vD-6s1">
@@ -108,13 +138,18 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="5K9-Pc-4BO"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ayI-Qh-84s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="61.832061068702288" y="3.5211267605633805"/>
         </scene>
     </scenes>
     <resources>
+        <image name="faceid" catalog="system" width="128" height="115"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
