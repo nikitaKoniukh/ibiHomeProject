@@ -25,8 +25,13 @@ final class AuthViewController: UIViewController {
         authViewModel?.delegate = self
         setupUI()
         setupAnimation()
+        setupTextField()
         navigationItem.hidesBackButton = true
-        //        authViewModel?.logout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupUI()
     }
     
     private func setupUI() {
@@ -57,9 +62,27 @@ final class AuthViewController: UIViewController {
     }
     
     private func navigateToMainScreen() {
+        clearTextFields()
         let homeViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTabBarController")
         homeViewController.navigationItem.hidesBackButton = true
         navigationController?.pushViewController(homeViewController, animated: true)
+    }
+    
+    private func clearTextFields() {
+        userNameTextField.text = ""
+        passwordTextField.text = ""
+    }
+    
+    private func setupTextField() {
+        userNameTextField.delegate = self
+        userNameTextField.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(tapGesture)
+        
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
@@ -106,5 +129,8 @@ extension AuthViewController {
 }
 
 extension AuthViewController: UITextFieldDelegate {
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

@@ -34,6 +34,7 @@ class HomeViewController: UIViewController {
         tableView.register(UINib(nibName: "ProductTableViewCell", bundle: nil), forCellReuseIdentifier: "ProductTableViewCell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.prefetchDataSource = self
     }
     
     private func setupBindings() {
@@ -73,6 +74,17 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let product = viewModel?.products[indexPath.row]
         presentDetailsViewController(with: product, indexPath: indexPath)
+    }
+}
+
+extension HomeViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            if indexPath.row >= (viewModel?.numberOfProducts() ?? 0) - 5 {
+                viewModel?.fetchProducts()
+                break
+            }
+        }
     }
 }
 

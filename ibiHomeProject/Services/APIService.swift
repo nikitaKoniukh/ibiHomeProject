@@ -10,18 +10,18 @@ import Foundation
 
 class APIService {
     static let shared = APIService()
-    private let baseURL = "https://dummyjson.com/products"
     private init() {}
     
-    func fetchProducts() -> AnyPublisher<ProductListResponse, Error> {
-        guard let url = URL(string: baseURL) else {
+    func fetchProducts(from urlString: String) -> AnyPublisher<[Product], Error> {
+        guard let url = URL(string: urlString) else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
         return URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
+            .map(\.data)
             .decode(type: ProductListResponse.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
+            .map(\.products)
+            .receive(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
     }
 }

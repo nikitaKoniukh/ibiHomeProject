@@ -11,8 +11,12 @@ import SwiftData
 
 class HomeViewModel: ObservableObject {
     @Published var products: [Product] = []
+    @Published private(set) var isLoading = false
+    private var skip = 0
+    private let limit = 30
+    private var hasMoreProducts = true
     private var cancellables = Set<AnyCancellable>()
-
+    
     func isProductSaved(_ product: Product?) -> Bool {
         if let product {
             return SwiftDataService.shared.productModels.contains(where: { $0.id == product.id })
@@ -33,15 +37,35 @@ class HomeViewModel: ObservableObject {
         }
     }
     
+    func numberOfProducts() -> Int {
+        return products.count
+    }
+    
+    
     func fetchProducts() {
-        APIService.shared.fetchProducts()
+        guard !isLoading, hasMoreProducts else { return }
+        isLoading = true
+        
+        let urlString = "https://dummyjson.com/products?skip=\(skip)&limit=\(limit)"
+        
+        APIService.shared.fetchProducts(from: urlString)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                self.isLoading = false
+                
                 if case .failure(let error) = completion {
-                    print("\(error)")
+                    print("Error fetching products: \(error)")
                 }
-            }, receiveValue: { [weak self] response in
-                self?.products = response.products
+            }, receiveValue: { [weak self] newProducts in
+                guard let self = self else { return }
+                
+                if newProducts.isEmpty {
+                    self.hasMoreProducts = false
+                } else {
+                    self.products.append(contentsOf: newProducts)
+                    self.skip += self.limit
+                }
             })
             .store(in: &cancellables)
     }

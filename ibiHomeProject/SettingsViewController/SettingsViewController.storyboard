@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,11 +16,69 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7J-7l-bBf">
+                                <rect key="frame" x="16" y="67" width="361" height="40.666666666666657"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qaK-Yp-Ji9">
+                                <rect key="frame" x="16" y="123.66666666666669" width="361" height="31"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dark mode:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80H-5P-GQI">
+                                        <rect key="frame" x="0.0" y="0.0" width="84" height="31"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zfq-2G-TEs">
+                                        <rect key="frame" x="312" y="0.0" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="darkModeSwitchSelected:" destination="Y6W-OH-hqX" eventType="valueChanged" id="QBq-10-5IX"/>
+                                        </connections>
+                                    </switch>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dob-Pr-hxc">
+                                <rect key="frame" x="139.66666666666666" y="718.66666666666663" width="113.66666666666666" height="34.333333333333371"/>
+                                <color key="tintColor" systemColor="systemRedColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Delete User"/>
+                                <connections>
+                                    <action selector="deleteUserButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="nzw-Mp-MiG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ib-HP-N4D">
+                                <rect key="frame" x="157.66666666666666" y="668.33333333333337" width="78" height="34.333333333333371"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Logout"/>
+                                <connections>
+                                    <action selector="logoutButtonPressed:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="jfb-ZJ-aLU"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Dob-Pr-hxc" firstAttribute="top" secondItem="5ib-HP-N4D" secondAttribute="bottom" constant="16" id="2dV-Z6-FHX"/>
+                            <constraint firstItem="qaK-Yp-Ji9" firstAttribute="top" secondItem="u7J-7l-bBf" secondAttribute="bottom" constant="16" id="6yp-Cp-xF8"/>
+                            <constraint firstItem="5ib-HP-N4D" firstAttribute="width" secondItem="Dob-Pr-hxc" secondAttribute="width" multiplier="0.686217" id="BAp-WF-vD5"/>
+                            <constraint firstItem="Dob-Pr-hxc" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="IUh-r5-Mfo"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="Dob-Pr-hxc" secondAttribute="bottom" constant="16" id="Mj5-B9-kJd"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="u7J-7l-bBf" secondAttribute="trailing" constant="16" id="cE7-mk-UTc"/>
+                            <constraint firstItem="u7J-7l-bBf" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="cmH-DH-kqn"/>
+                            <constraint firstItem="qaK-Yp-Ji9" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="er5-ZE-d1R"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="qaK-Yp-Ji9" secondAttribute="trailing" constant="16" id="jaD-6g-buO"/>
+                            <constraint firstItem="5ib-HP-N4D" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="mge-e9-gUq"/>
+                            <constraint firstItem="u7J-7l-bBf" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="8" id="xsj-fo-pRS"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gearshape" catalog="system" id="2ro-5x-dBi"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="darkModeSwitch" destination="zfq-2G-TEs" id="T8q-U6-EM0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -30,6 +89,9 @@
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
