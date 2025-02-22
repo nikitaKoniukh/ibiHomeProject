@@ -7,19 +7,27 @@
 
 import UIKit
 import Combine
+import SwiftData
 
 class HomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    private var viewModel = HomeViewModel()
+    private var viewModel: HomeViewModel?
     private var cancellables = Set<AnyCancellable>()
+    var container: ModelContainer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = HomeViewModel()
         setupTableView()
         setupBindings()
-        viewModel.fetchProducts()
+        viewModel?.fetchProducts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     private func setupTableView() {
@@ -29,7 +37,7 @@ class HomeViewController: UIViewController {
     }
     
     private func setupBindings() {
-        viewModel.$products
+        viewModel?.$products
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -40,19 +48,30 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.products.count
+        return viewModel?.products.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductTableViewCell", for: indexPath) as? ProductTableViewCell
-        
-        let product = viewModel.products[indexPath.row]
-        cell?.configure(with: product)
+        cell?.delelegate = self
+        let product = viewModel?.products[indexPath.row]
+        let isSaved = viewModel?.isProductSaved(product) == true
+        cell?.configure(with: product, saved: isSaved)
         return cell ?? UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Выбран продукт: \(viewModel.products[indexPath.row].title)")
+//        print("Выбран продукт: \(viewModel?.products[indexPath.row].title)")
+    }
+}
+
+extension HomeViewController: ProductTableViewCellDelegate {
+    func favoriteSelected(for product: Product?) {
+        viewModel?.saveProduct(product)
+    }
+    
+    func favoriteDeSelected(for product: Product?) {
+        viewModel?.deleteProduct(product)
     }
 }

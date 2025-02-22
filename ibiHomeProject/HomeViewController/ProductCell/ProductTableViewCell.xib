@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -52,10 +53,25 @@
                             </label>
                         </subviews>
                     </stackView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MN0-xY-77A">
+                        <rect key="frame" x="78" y="78" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Xhg-vY-ilh"/>
+                            <constraint firstAttribute="width" constant="30" id="rnd-CM-1OZ"/>
+                        </constraints>
+                        <color key="tintColor" systemColor="systemYellowColor"/>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" image="star" catalog="system"/>
+                        <connections>
+                            <action selector="favoritesButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="x27-AA-OJj"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="fbT-xQ-naE" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="4q6-Ru-12w"/>
+                    <constraint firstItem="MN0-xY-77A" firstAttribute="trailing" secondItem="fbT-xQ-naE" secondAttribute="trailing" id="9O6-Gg-mW3"/>
                     <constraint firstItem="fbT-xQ-naE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="Ndo-aq-AzZ"/>
+                    <constraint firstItem="MN0-xY-77A" firstAttribute="bottom" secondItem="fbT-xQ-naE" secondAttribute="bottom" id="OBR-QP-aCU"/>
                     <constraint firstItem="Swv-Qd-9L4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="SL3-Cm-4nK"/>
                     <constraint firstAttribute="trailing" secondItem="Swv-Qd-9L4" secondAttribute="trailing" constant="8" id="VqS-Zo-70X"/>
                     <constraint firstAttribute="bottom" secondItem="Swv-Qd-9L4" secondAttribute="bottom" constant="8" id="ZUq-5N-RbM"/>
@@ -67,6 +83,7 @@
             <connections>
                 <outlet property="brandLabel" destination="B0D-Gg-Je7" id="1Lp-af-dkH"/>
                 <outlet property="descriptionLabel" destination="p8j-TW-wwe" id="wdq-Vj-hHh"/>
+                <outlet property="favoriteButton" destination="MN0-xY-77A" id="53O-QT-hU9"/>
                 <outlet property="priceLabel" destination="BiR-MW-mIe" id="dHG-oi-jCa"/>
                 <outlet property="productImageView" destination="fbT-xQ-naE" id="M9u-R7-FmF"/>
                 <outlet property="titleLabel" destination="jf0-fx-SQ9" id="4Uf-83-Wu5"/>
@@ -74,4 +91,10 @@
             <point key="canvasLocation" x="228.24427480916029" y="46.83098591549296"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="star" catalog="system" width="128" height="116"/>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
