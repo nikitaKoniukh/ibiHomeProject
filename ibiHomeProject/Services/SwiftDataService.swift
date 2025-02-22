@@ -39,11 +39,25 @@ class SwiftDataService {
         }
     }
     
+    func updateProduct(_ productModel: ProductModel?) {
+        guard let productModel else {
+            return
+        }
+        
+        context?.insert(productModel)
+        do {
+            try context?.save()
+            fetchAllProducts()
+        } catch {
+            print("Failed to save: \(error)")
+        }
+    }
+    
     func deleteProduct(_ product: Product?) {
         guard let product else {
             return
         }
-
+        
         let productToDeleteId = product.id
         guard let productModel = productModels.first(where: { $0.id == productToDeleteId }) else {
             return
@@ -62,7 +76,7 @@ class SwiftDataService {
         guard let productModel else {
             return
         }
-
+        
         let productToDeleteId = productModel.id
         guard let productModel = productModels.first(where: { $0.id == productToDeleteId }) else {
             return

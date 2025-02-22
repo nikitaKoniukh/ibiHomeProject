@@ -44,6 +44,14 @@ class HomeViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
+    
+    private func presentDetailsViewController(with product: Product?, indexPath: IndexPath) {
+        let sb = UIStoryboard(name: "DetailsViewController", bundle: nil)
+        if let product, let detailsViewController = sb.instantiateInitialViewController() as? DetailsViewController {
+            detailsViewController.product = product
+            self.navigationController?.present(detailsViewController, animated: true)
+        }
+    }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -62,7 +70,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        print("Выбран продукт: \(viewModel?.products[indexPath.row].title)")
+        tableView.deselectRow(at: indexPath, animated: true)
+        let product = viewModel?.products[indexPath.row]
+        presentDetailsViewController(with: product, indexPath: indexPath)
     }
 }
 

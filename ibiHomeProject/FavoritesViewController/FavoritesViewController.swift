@@ -42,6 +42,20 @@ class FavoritesViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
+    
+    private func presentDetailsViewController(with productModel: ProductModel?, indexPath: IndexPath) {
+        let sb = UIStoryboard(name: "DetailsViewController", bundle: nil)
+        if let productModel, let detailsViewController = sb.instantiateInitialViewController() as? DetailsViewController {
+            detailsViewController.productModel = productModel
+            
+            detailsViewController.onHandleClose = { [weak self] in
+                self?.viewModel.reloadData()
+                self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+            
+            self.navigationController?.present(detailsViewController, animated: true)
+        }
+    }
 }
 
 extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
@@ -58,7 +72,9 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        print("Выбран продукт: \(viewModel?.products[indexPath.row].title)")
+        tableView.deselectRow(at: indexPath, animated: true)
+        let productModel = viewModel.favorites[indexPath.row]
+        presentDetailsViewController(with: productModel, indexPath: indexPath)
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
