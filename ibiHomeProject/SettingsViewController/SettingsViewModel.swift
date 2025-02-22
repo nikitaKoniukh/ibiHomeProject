@@ -16,7 +16,19 @@ class SettingsViewModel {
     weak var delegate: SettingsViewModelDelegate?
     
     var isDarkModeEnabled: Bool {
-        return UserDefaults.standard.integer(forKey: "theme") == 2
+        switch UserDefaults.standard.integer(forKey: "theme") {
+        case 1:
+            return false
+        case 2:
+            return true
+        default:
+            let style = UIScreen.main.traitCollection.userInterfaceStyle
+            if style == .dark {
+                return true
+            } else {
+                return false
+            }
+        }
     }
     
     func setIsDarkModeEnabled(_ isDarkModeEnabled: Bool) {

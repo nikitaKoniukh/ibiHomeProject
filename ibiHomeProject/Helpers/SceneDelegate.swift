@@ -16,6 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        clearKeychainIfWillUnistall()
         applySavedTheme()
         guard let _ = (scene as? UIWindowScene) else { return }
     }
@@ -49,7 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
-    func applySavedTheme() {
+    private func applySavedTheme() {
         if let savedTheme = UserDefaults.standard.value(forKey: "theme") as? Int,
            let theme = UIUserInterfaceStyle(rawValue: savedTheme) {
             
@@ -58,6 +59,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     window.overrideUserInterfaceStyle = theme
                 }
             }
+        }
+    }
+    
+    private func clearKeychainIfWillUnistall() {
+        let freshInstall = !UserDefaults.standard.bool(forKey: "alreadyInstalled")
+        if freshInstall {
+            let keychainService = "com.example.auth"
+            
+            
+            let query: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrService as String: keychainService,
+                kSecAttrAccessible as String: kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
+            ]
+            SecItemDelete(query as CFDictionary)
+            
+            UserDefaults.standard.set(true, forKey: "alreadyInstalled")
         }
     }
 }
